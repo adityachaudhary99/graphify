@@ -1,0 +1,24 @@
+# Route53 Configuration Example (Optional)
+# Copy this file to terraform.tfvars and update with your values
+# Only needed if you want to use a custom domain
+
+project = "my-app"  # Must match project name from VPC module
+
+# Your domain name
+domain_name = "example.com"
+
+# ALB DNS names from ALB module output
+# Run: cd ../alb && terraform output alb_dns_names
+alb_dns_names = {
+  dev     = "your-app-dev-alb-xxxxxxxx.us-east-1.elb.amazonaws.com"
+  staging = "your-app-staging-alb-xxxxxxxx.us-east-1.elb.amazonaws.com"
+  prod    = "your-app-prod-alb-xxxxxxxx.us-east-1.elb.amazonaws.com"
+}
+
+# ALB zone IDs from ALB module output
+# Run: cd ../alb && terraform output alb_zone_ids
+alb_zone_ids = {
+  dev     = "Z35SXDOTRQ7X7K"
+  staging = "Z35SXDOTRQ7X7K"
+  prod    = "Z35SXDOTRQ7X7K"
+}

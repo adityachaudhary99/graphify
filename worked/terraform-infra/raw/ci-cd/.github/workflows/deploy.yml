@@ -1,0 +1,100 @@
+name: Deploy to ECS
+
+on:
+  push:
+    branches:
+      - main
+      - staging
+      - develop
+
+env:
+  AWS_REGION: us-east-1
+  ECR_REPOSITORY: your-app-api  # Change to match your ECR repository name
+  
+jobs:
+  deploy:
+    name: Build and Deploy
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Set environment variables
+        id: vars
+        run: |
+          if [[ "${{ github.ref }}" == "refs/heads/main" ]]; then
+            echo "ENVIRONMENT=prod" >> $GITHUB_OUTPUT
+            echo "ECS_CLUSTER=your-app-prod-cluster" >> $GITHUB_OUTPUT
+            echo "ECS_SERVICE=your-app-prod-api-service" >> $GITHUB_OUTPUT
+            echo "TASK_DEFINITION=your-app-prod-api" >> $GITHUB_OUTPUT
+          elif [[ "${{ github.ref }}" == "refs/heads/staging" ]]; then
+            echo "ENVIRONMENT=staging" >> $GITHUB_OUTPUT
+            echo "ECS_CLUSTER=your-app-staging-cluster" >> $GITHUB_OUTPUT
+            echo "ECS_SERVICE=your-app-staging-api-service" >> $GITHUB_OUTPUT
+            echo "TASK_DEFINITION=your-app-staging-api" >> $GITHUB_OUTPUT
+          else
+            echo "ENVIRONMENT=dev" >> $GITHUB_OUTPUT
+            echo "ECS_CLUSTER=your-app-dev-cluster" >> $GITHUB_OUTPUT
+            echo "ECS_SERVICE=your-app-dev-api-service" >> $GITHUB_OUTPUT
+            echo "TASK_DEFINITION=your-app-dev-api" >> $GITHUB_OUTPUT
+          fi
+      
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+      
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+      
+      - name: Build, tag, and push image to Amazon ECR
+        id: build-image
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          IMAGE_TAG: ${{ github.sha }}
+          ENVIRONMENT: ${{ steps.vars.outputs.ENVIRONMENT }}
+        run: |
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+          docker tag $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG \
+            $ECR_REGISTRY/$ECR_REPOSITORY:$ENVIRONMENT-latest
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$ENVIRONMENT-latest
+          docker tag $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG \
+            $ECR_REGISTRY/$ECR_REPOSITORY:$ENVIRONMENT-$IMAGE_TAG
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$ENVIRONMENT-$IMAGE_TAG
+          echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
+      
+      - name: Download current task definition
+        run: |
+          aws ecs describe-task-definition \
+            --task-definition ${{ steps.vars.outputs.TASK_DEFINITION }} \
+            --query taskDefinition > task-definition.json
+      
+      - name: Fill in the new image ID in the task definition
+        id: task-def
+        uses: aws-actions/amazon-ecs-render-task-definition@v1
+        with:
+          task-definition: task-definition.json
+          container-name: api
+          image: ${{ steps.build-image.outputs.image }}
+      
+      - name: Deploy to Amazon ECS
+        uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+        with:
+          task-definition: ${{ steps.task-def.outputs.task-definition }}
+          service: ${{ steps.vars.outputs.ECS_SERVICE }}
+          cluster: ${{ steps.vars.outputs.ECS_CLUSTER }}
+          wait-for-service-stability: true
+      
+      - name: Deployment summary
+        if: always()
+        run: |
+          if [ "${{ job.status }}" == "success" ]; then
+            echo "✅ Successfully deployed to ${{ steps.vars.outputs.ENVIRONMENT }}"
+          else
+            echo "❌ Deployment to ${{ steps.vars.outputs.ENVIRONMENT }} failed"
+          fi

@@ -1,0 +1,20 @@
+# VPC Configuration Example
+# Copy this file to terraform.tfvars and update with your values
+
+project = "my-app"        # Your project name (lowercase, alphanumeric, hyphens only)
+region  = "us-east-1"     # AWS region
+vpc_cidr = "10.0.0.0/16"  # VPC CIDR block
+
+# Environment configuration (AZ indices)
+# Each environment will be deployed in a different availability zone
+environments = {
+  dev = {
+    az_index = 0  # us-east-1a
+  }
+  staging = {
+    az_index = 1  # us-east-1b
+  }
+  prod = {
+    az_index = 2  # us-east-1c
+  }
+}

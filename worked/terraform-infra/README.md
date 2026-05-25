@@ -1,45 +1,39 @@
-# Terraform Infrastructure Corpus Benchmark
+# Terraform Worked Example
 
-A 7-file Terraform codebase modeling a production-grade multi-tier AWS infrastructure. Tests graphify on HashiCorp Configuration Language (HCL) — the first non-general-purpose DSL supported by graphify's AST extractor.
+This directory contains a **production-ready AWS multi-environment Terraform template** extracted into a graphify knowledge graph.
 
-## Corpus (7 files)
+The Terraform code comes from [github.com/adityachaudhary99/aws-terraform-multi-env-template](https://github.com/adityachaudhary99/aws-terraform-multi-env-template) — a real infrastructure-as-code project with modular architecture, CI/CD, and dev/staging/prod environments.
 
-```
-raw/
-├── main.tf          — Terraform/provider config, backend, random_pet suffix
-├── variables.tf     — Input variables (region, environment, instance sizes, ports)
-├── networking.tf    — VPC, subnets (public/private/database), IGW, NAT, security groups
-├── compute.tf       — ECS cluster, task definition, service, ALB, IAM roles, ECR, CloudWatch logs
-├── database.tf      — RDS PostgreSQL, subnet group, parameter group, random password
-├── storage.tf       — S3 buckets (app data, logs, backups), replication, IAM replication role
-├── monitoring.tf    — CloudWatch alarms (CPU, memory, DB connections, 5xx), SNS topic + subscription
-└── outputs.tf       — Outputs for VPC ID, ALB DNS, cluster name, DB endpoint, bucket name, SNS ARN
-```
+## What this demonstrates
 
-Architecture: a load-balanced Fargate service running behind an ALB, backed by RDS PostgreSQL, with S3 for application data and backups, CloudWatch monitoring, and SNS alerting. Cross-resource references span every file — the task definition references the RDS address, the ALB references the target group, alarms reference the cluster and service, and IAM policies reference S3 bucket ARNs.
+- **Terraform/HCL extraction** — graphify's `extract_terraform()` walker parses `.tf` files using `tree-sitter-hcl`, producing structured nodes for every block type: resources, data sources, variables, outputs, modules, and locals.
+- **Cross-file reference resolution** — attribute references like `var.domain_name` and `aws_vpc.main.id` are resolved into `references` edges across module boundaries via stem-independent node IDs.
+- **Real-world complexity** — 54 files across 8 modules (VPC, ALB, ECS, ECR, RDS, Bastion, Route53, Security Groups) producing 608 nodes and 733 edges.
 
-## How to run
+## Graph Stats
+
+| Metric | Value |
+|--------|-------|
+| Nodes | 608 |
+| Edges | 733 |
+| Cross-file refs | 168 |
+| Resources | 54 |
+| Modules | 8 |
+
+## Files
+
+| File | Description |
+|------|-------------|
+| `raw/` | Terraform source files (copied from upstream template) |
+| `graph.json` | Full extracted knowledge graph |
+| `GRAPH_REPORT.md` | Analysis of graph structure and findings |
+
+## Usage
 
 ```bash
-pip install graphifyy
+# Extract the graph from scratch
+graphify extract raw/
 
-graphify install                        # Claude Code
-graphify install --platform codex       # Codex
-graphify install --platform opencode    # OpenCode
-graphify install --platform claw        # OpenClaw
+# Or use the pre-generated graph
+graphify build . --graph graph.json
 ```
-
-Then open your AI coding assistant in this directory and type:
-
-```
-/graphify ./raw
-```
-
-## What to expect
-
-- 100+ AST nodes: resources, data sources, variables, outputs, locals, and modules — one of the most structurally diverse corpora supported
-- God nodes: `aws_vpc.main`, `aws_ecs_cluster.main`, `aws_db_instance.postgres` — the core infrastructure primitives that everything else depends on
-- Cross-file references: the `aws_ecs_task_definition.app` references `aws_db_instance.postgres` (database.tf), `aws_s3_bucket.app` (storage.tf), and `aws_cloudwatch_log_group.app` (monitoring.tf) — spanning 4 files
-- Token reduction: moderate — 8 files of HCL is small, but the dense cross-referencing produces a richer graph than a same-sized Python corpus
-
-This is the first time graphify has been applied to a DSL (domain-specific language) corpus. It demonstrates that graphify's tree-sitter extraction pipeline generalizes beyond general-purpose languages to infrastructure-as-code. Actual output is in this folder: `GRAPH_REPORT.md` and `graph.json`. Full evaluation: `review.md`.

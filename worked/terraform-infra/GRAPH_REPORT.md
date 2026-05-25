@@ -1,88 +1,61 @@
-# Graph Report - worked\terraform-infra\raw  (2026-05-25)
+# AWS Multi-Environment Terraform — Graph Report
 
-## Corpus Check
-- 8 files · ~1,793 words
-- Verdict: corpus is large enough that graph structure adds value.
+## Overview
 
-## Summary
-- 84 nodes · 82 edges · 8 communities
-- Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS
-- Token cost: 0 input · 0 output
+| Metric | Value |
+|--------|-------|
+| Total nodes | 608 |
+| Total edges | 733 |
+| Reference edges | 168 (cross-file) |
+| Unique cross-file pairs | 90 |
+| Modules | 8 (VPC, ALB, ECS, ECR, RDS, Bastion, Route53, Security Groups) |
+| Files | 54 |
+| Resources | 54 |
+| Variables | 23 |
+| Data sources | 4 |
+| Outputs | 40 |
 
-## Graph Freshness
-- Built from commit: `43baaf19`
-- Run `git rev-parse HEAD` and compare to check if the graph is stale.
-- Run `graphify update .` after code changes (no API cost).
+## Graph Structure
 
-## Community Hubs (Navigation)
-- [[_COMMUNITY_Community 0|Community 0]]
-- [[_COMMUNITY_Community 1|Community 1]]
-- [[_COMMUNITY_Community 2|Community 2]]
-- [[_COMMUNITY_Community 3|Community 3]]
-- [[_COMMUNITY_Community 4|Community 4]]
-- [[_COMMUNITY_Community 5|Community 5]]
-- [[_COMMUNITY_Community 6|Community 6]]
-- [[_COMMUNITY_Community 7|Community 7]]
+The knowledge graph captures the complete dependency structure of a production AWS multi-environment Terraform deployment. Each module is represented as a set of file nodes, with `contains` edges linking blocks (resources, variables, outputs, data sources) to their source files.
 
-## God Nodes (most connected - your core abstractions)
-1. `rule` - 6 edges
-2. `aws_ecs_service.app` - 3 edges
-3. `terraform` - 3 edges
-4. `aws_security_group.alb` - 3 edges
-5. `ingress` - 3 edges
-6. `aws_security_group.ecs_tasks` - 3 edges
-7. `aws_ecs_cluster.main` - 2 edges
-8. `aws_lb_target_group.app` - 2 edges
-9. `aws_lb_listener.main` - 2 edges
-10. `aws_ecr_repository.app` - 2 edges
+### Node Distribution
 
-## Surprising Connections (you probably didn't know these)
-- None detected - all connections are within the same source files.
+Attribute nodes (nested block attributes) account for the largest group — these are the individual configuration settings within each resource block. Resource nodes (54) represent actual AWS infrastructure resources like `aws_vpc.main`, `aws_ecs_cluster.main`, `aws_db_instance.dev/staging/prod`, etc.
 
-## Communities (8 total, 0 thin omitted)
+### Cross-Module References (168 edges)
 
-### Community 0 - "Community 0"
-Cohesion: 0.11
-Nodes (18): aws_acm_certificate.main, default_action, health_check, image_scanning_configuration, load_balancer, network_configuration, aws_cloudwatch_log_group.app, aws_ecr_repository.app (+10 more)
+The Terraform extractor resolves attribute references across file boundaries using stem-independent node IDs. The most heavily referenced targets are shared infrastructure resources:
 
-### Community 1 - "Community 1"
-Cohesion: 0.13
-Nodes (17): apply_server_side_encryption_by_default, destination, expiration, aws_iam_role_policy.replication, aws_iam_role.replication, aws_s3_bucket.app, aws_s3_bucket.backups, aws_s3_bucket.dr_backups (+9 more)
+| Target | Refs | Description |
+|--------|------|-------------|
+| `variable_domain_name` | 10 | Domain name consumed by Route53, ACM, ALB |
+| `resource_aws_vpc_main` | 9 | VPC referenced by Bastion, ALB, ECS, RDS |
+| `resource_aws_appautoscaling_target_ecs` | 6 | ECS auto-scaling target |
+| `resource_aws_lb_main` | 5 | ALB referenced by Route53, ECS |
+| `resource_aws_ecs_cluster_main` | 5 | ECS cluster referenced by services |
 
-### Community 2 - "Community 2"
-Cohesion: 0.18
-Nodes (13): aws_availability_zones.available, egress, ingress, aws_eip.nat, aws_internet_gateway.main, aws_nat_gateway.main, aws_security_group.alb, aws_security_group.database (+5 more)
+### Module Dependencies
 
-### Community 3 - "Community 3"
-Cohesion: 0.29
-Nodes (6): aws_cloudwatch_metric_alarm.alb_5xx, aws_cloudwatch_metric_alarm.cpu_high, aws_cloudwatch_metric_alarm.db_connections, aws_cloudwatch_metric_alarm.memory_high, aws_sns_topic.alerts, aws_sns_topic_subscription.alerts_email
+The dependency graph shows a clean layered architecture:
 
-### Community 4 - "Community 4"
-Cohesion: 0.29
-Nodes (6): alb_dns_name, app_bucket, db_endpoint, ecs_cluster_name, sns_topic_arn, vpc_id
+```
+Internet Gateway → VPC → Security Groups → ALB / Bastion
+                                                ↓
+                         Route53 → ACM → ALB → ECS → ECR
+                                                    ↓
+                                               RDS (dev/staging/prod)
+```
 
-### Community 5 - "Community 5"
-Cohesion: 0.29
-Nodes (6): app_port, aws_region, db_instance_class, environment, instance_count, vpc_cidr
+## Quality Assessment
 
-### Community 6 - "Community 6"
-Cohesion: 0.33
-Nodes (5): backend, provider, required_providers, random_pet.suffix, terraform
+- **Confidence**: All 733 edges are `EXTRACTED` (confidence_score: 1.0) — derived directly from AST parsing, no inference.
+- **Completeness**: Every Terraform block type is captured — resource, data, variable, output, module, locals, terraform.
+- **Cross-file resolution**: 168 references resolved across module boundaries. This confirms the stem-independent nid scheme works correctly for multi-module Terraform projects.
 
-### Community 7 - "Community 7"
-Cohesion: 0.33
-Nodes (5): parameter, aws_db_instance.postgres, aws_db_parameter_group.postgres, aws_db_subnet_group.main, random_password.db_master
+## Key Insights
 
-## Knowledge Gaps
-- **57 isolated node(s):** `setting`, `aws_ecs_task_definition.app`, `network_configuration`, `load_balancer`, `aws_lb.main` (+52 more)
-  These have ≤1 connection - possible missing edges or undocumented components.
-
-## Suggested Questions
-_Questions this graph is uniquely positioned to answer:_
-
-- **What connects `setting`, `aws_ecs_task_definition.app`, `network_configuration` to the rest of the system?**
-  _57 weakly-connected nodes found - possible documentation gaps or missing edges._
-- **Should `Community 0` be split into smaller, more focused modules?**
-  _Cohesion score 0.11 - nodes in this community are weakly interconnected._
-- **Should `Community 1` be split into smaller, more focused modules?**
-  _Cohesion score 0.13 - nodes in this community are weakly interconnected._
+1. `variable_domain_name` is the single most referenced node — a true "god variable" that ties together DNS, TLS, and routing.
+2. RDS instances are provisioned per-environment (dev/staging/prod), each referencing shared VPC and security group outputs.
+3. The ECS module has the most cross-file references (26 source refs), reflecting its central role connecting ALB, ECR, RDS, and VPC modules.
+4. Outputs files (`outputs.tf`) serve as the module interface layer — 58 references originate from output files, showing the module boundary pattern.

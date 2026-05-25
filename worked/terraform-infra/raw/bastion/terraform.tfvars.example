@@ -1,0 +1,15 @@
+# Bastion Host Configuration Example
+# Copy this file to terraform.tfvars and update with your values
+
+project = "my-app"  # Must match project name from VPC module
+
+# VPC ID from VPC module output
+vpc_id = "vpc-xxxxxxxxxxxxxxxxx"
+
+# Public subnet ID (any public subnet from VPC)
+# Run: cd ../vpc && terraform output public_subnet_ids
+public_subnet_id = "subnet-xxxxxxxxxxxxxxxxx"
+
+# Bastion security group ID from security-groups module output
+# Run: cd ../security-groups && terraform output bastion_security_group_id
+bastion_security_group_id = "sg-xxxxxxxxxxxxxxxxx"

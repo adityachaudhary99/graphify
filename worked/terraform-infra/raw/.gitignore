@@ -1,0 +1,42 @@
+# Terraform
+.terraform/
+.terraform.lock.hcl
+terraform.tfstate
+terraform.tfstate.backup
+*.tfstate
+*.tfstate.*
+
+# Terraform variable files (may contain sensitive data)
+*.tfvars
+!terraform.tfvars.example
+# Allow example files but ignore actual tfvars
+terraform.tfvars
+*.auto.tfvars
+
+# Environment files
+.env
+*.env
+
+# Sensitive files
+*.pem
+*.key
+*.crt
+
+# Output files
+*.json
+!package.json
+!package-lock.json
+
+# Scripts (generated)
+*.sh
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~

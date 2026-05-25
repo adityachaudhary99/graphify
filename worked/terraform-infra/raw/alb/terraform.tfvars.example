@@ -1,0 +1,23 @@
+# Application Load Balancer Configuration Example
+# Copy this file to terraform.tfvars and update with your values
+
+project = "my-app"  # Must match project name from VPC module
+
+# VPC ID from VPC module output
+vpc_id = "vpc-xxxxxxxxxxxxxxxxx"
+
+# Public subnet IDs from VPC module output
+# Run: cd ../vpc && terraform output public_subnet_ids
+public_subnet_ids = {
+  dev     = "subnet-xxxxxxxxxxxxxxxxx"
+  staging = "subnet-xxxxxxxxxxxxxxxxx"
+  prod    = "subnet-xxxxxxxxxxxxxxxxx"
+}
+
+# ALB security group IDs from security-groups module output
+# Run: cd ../security-groups && terraform output alb_security_group_ids
+alb_security_group_ids = {
+  dev     = "sg-xxxxxxxxxxxxxxxxx"
+  staging = "sg-xxxxxxxxxxxxxxxxx"
+  prod    = "sg-xxxxxxxxxxxxxxxxx"
+}

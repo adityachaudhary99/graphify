@@ -1,0 +1,63 @@
+# ECS Configuration Example
+# Copy this file to terraform.tfvars and update with your values
+
+project = "my-app"  # Must match project name from VPC module
+
+# VPC ID from VPC module output
+vpc_id = "vpc-xxxxxxxxxxxxxxxxx"
+
+# Private app subnet IDs from VPC module output
+# Run: cd ../vpc && terraform output private_app_subnet_ids
+private_app_subnet_ids = {
+  dev     = "subnet-xxxxxxxxxxxxxxxxx"
+  staging = "subnet-xxxxxxxxxxxxxxxxx"
+  prod    = "subnet-xxxxxxxxxxxxxxxxx"
+}
+
+# ECS security group IDs from security-groups module output
+# Run: cd ../security-groups && terraform output ecs_security_group_ids
+ecs_security_group_ids = {
+  dev     = "sg-xxxxxxxxxxxxxxxxx"
+  staging = "sg-xxxxxxxxxxxxxxxxx"
+  prod    = "sg-xxxxxxxxxxxxxxxxx"
+}
+
+# ALB target group ARNs from ALB module output
+# Run: cd ../alb && terraform output target_group_arns
+alb_target_group_arns = {
+  dev     = "arn:aws:elasticloadbalancing:us-east-1:xxxxxxxxxxxx:targetgroup/..."
+  staging = "arn:aws:elasticloadbalancing:us-east-1:xxxxxxxxxxxx:targetgroup/..."
+  prod    = "arn:aws:elasticloadbalancing:us-east-1:xxxxxxxxxxxx:targetgroup/..."
+}
+
+# Database endpoints from database module output
+# Run: cd ../database && terraform output database_endpoints
+database_endpoints = {
+  dev = {
+    endpoint   = "your-app-dev-postgres.xxxxx.us-east-1.rds.amazonaws.com"
+    database   = "mydb"
+    port       = 5432
+  }
+  staging = {
+    endpoint   = "your-app-staging-postgres.xxxxx.us-east-1.rds.amazonaws.com"
+    database   = "mydb"
+    port       = 5432
+  }
+  prod = {
+    endpoint   = "your-app-prod-postgres.xxxxx.us-east-1.rds.amazonaws.com"
+    database   = "mydb"
+    port       = 5432
+  }
+}
+
+# Database secret ARNs from database module output
+# Run: cd ../database && terraform output db_secret_arns
+db_secret_arns = {
+  dev     = "arn:aws:secretsmanager:us-east-1:xxxxxxxxxxxx:secret:..."
+  staging = "arn:aws:secretsmanager:us-east-1:xxxxxxxxxxxx:secret:..."
+  prod    = "arn:aws:secretsmanager:us-east-1:xxxxxxxxxxxx:secret:..."
+}
+
+# ECR repository URL from ECR module output
+# Run: cd ../ecr && terraform output repository_url
+ecr_repository_url = "xxxxxxxxxxxx.dkr.ecr.us-east-1.amazonaws.com/my-app-api"

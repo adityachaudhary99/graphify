@@ -1,0 +1,347 @@
+# AWS Multi-Environment Infrastructure - Mermaid Diagrams
+
+**View these diagrams on GitHub or copy to https://mermaid.live to visualize**
+
+---
+
+## 1. Complete Infrastructure Overview
+
+```mermaid
+graph TB
+    subgraph Internet["🌐 Internet"]
+        Users["Users/Developers"]
+        GitHub["GitHub Actions"]
+    end
+
+    subgraph AWS["☁️ AWS Cloud - us-east-1"]
+        IGW["Internet Gateway"]
+        
+        subgraph VPC["VPC: 10.0.0.0/16"]
+            
+            subgraph AZ1["Availability Zone 1a - DEV"]
+                subgraph PubSub1["Public Subnet<br/>10.0.0.0/24"]
+                    ALB1["ALB Dev<br/>:80, :443"]
+                    NAT1["NAT Gateway"]
+                end
+                
+                subgraph PrivApp1["Private App Subnet<br/>10.0.10.0/24"]
+                    ECS1["ECS Fargate<br/>1-4 tasks<br/>FARGATE_SPOT"]
+                end
+                
+                subgraph PrivDB1["Private DB Subnet<br/>10.0.20.0/24"]
+                    RDS1["RDS PostgreSQL 17.5<br/>db.t3.medium<br/>20GB"]
+                end
+            end
+            
+            subgraph AZ2["Availability Zone 1b - STAGING"]
+                subgraph PubSub2["Public Subnet<br/>10.0.1.0/24"]
+                    ALB2["ALB Staging<br/>:80, :443"]
+                    NAT2["NAT Gateway"]
+                end
+                
+                subgraph PrivApp2["Private App Subnet<br/>10.0.11.0/24"]
+                    ECS2["ECS Fargate<br/>1-4 tasks<br/>FARGATE_SPOT"]
+                end
+                
+                subgraph PrivDB2["Private DB Subnet<br/>10.0.21.0/24"]
+                    RDS2["RDS PostgreSQL 17.5<br/>db.t3.large<br/>50GB"]
+                end
+            end
+            
+            subgraph AZ3["Availability Zone 1c - PROD"]
+                subgraph PubSub3["Public Subnet<br/>10.0.2.0/24"]
+                    ALB3["ALB Prod<br/>:80, :443"]
+                    NAT3["NAT Gateway"]
+                    Bastion["Bastion Host<br/>t3.micro"]
+                end
+                
+                subgraph PrivApp3["Private App Subnet<br/>10.0.12.0/24"]
+                    ECS3["ECS Fargate<br/>2-10 tasks<br/>FARGATE"]
+                end
+                
+                subgraph PrivDB3["Private DB Subnet<br/>10.0.22.0/24"]
+                    RDS3["RDS PostgreSQL 17.5<br/>db.r6g.2xlarge<br/>Multi-AZ<br/>100GB-1TB Auto-scale"]
+                end
+            end
+        end
+        
+        subgraph Shared["Shared Services"]
+            ECR["ECR Repository<br/>your-app-api"]
+            Secrets["Secrets Manager<br/>DB Passwords"]
+            Route53["Route 53<br/>DNS & SSL"]
+        end
+    end
+
+    %% User flow
+    Users -->|HTTPS| Route53
+    Route53 -->|DNS| IGW
+    IGW --> ALB1
+    IGW --> ALB2
+    IGW --> ALB3
+    
+    ALB1 --> ECS1
+    ALB2 --> ECS2
+    ALB3 --> ECS3
+    
+    ECS1 -->|Read/Write| RDS1
+    ECS2 -->|Read/Write| RDS2
+    ECS3 -->|Read/Write| RDS3
+    
+    ECS1 -.->|NAT| NAT1
+    ECS2 -.->|NAT| NAT2
+    ECS3 -.->|NAT| NAT3
+    
+    %% CI/CD flow
+    GitHub -->|Push Image| ECR
+    ECR -->|Pull Image| ECS1
+    ECR -->|Pull Image| ECS2
+    ECR -->|Pull Image| ECS3
+    
+    %% Secrets
+    ECS1 -.->|Get Password| Secrets
+    ECS2 -.->|Get Password| Secrets
+    ECS3 -.->|Get Password| Secrets
+    
+    %% Bastion access
+    Users -.->|SSH Tunnel| Bastion
+    Bastion -.->|DB Access| RDS1
+    Bastion -.->|DB Access| RDS2
+    Bastion -.->|DB Access| RDS3
+
+    classDef public fill:#e1f5ff,stroke:#0066cc,stroke-width:2px
+    classDef private fill:#fff4e6,stroke:#ff9900,stroke-width:2px
+    classDef database fill:#f0f9ff,stroke:#0099cc,stroke-width:2px
+    classDef shared fill:#f5f5f5,stroke:#666,stroke-width:2px
+    
+    class ALB1,ALB2,ALB3,NAT1,NAT2,NAT3,Bastion public
+    class ECS1,ECS2,ECS3 private
+    class RDS1,RDS2,RDS3 database
+    class ECR,Secrets,Route53 shared
+```
+
+---
+
+## 2. Request Flow (Sequence Diagram)
+
+```mermaid
+sequenceDiagram
+    participant User
+    participant Route53
+    participant ALB
+    participant ECS
+    participant Secrets
+    participant RDS
+
+    User->>Route53: HTTPS Request (api.domain.com)
+    Route53->>ALB: DNS Resolution
+    ALB->>ALB: Health Check
+    ALB->>ECS: Forward to Healthy Task
+    ECS->>Secrets: Get DB Password
+    Secrets-->>ECS: Return Credentials
+    ECS->>RDS: Execute Query
+    RDS-->>ECS: Return Data
+    ECS-->>ALB: JSON Response
+    ALB-->>Route53: Response
+    Route53-->>User: HTTPS Response
+```
+
+---
+
+## 3. CI/CD Pipeline
+
+```mermaid
+graph LR
+    A[👨‍💻 Developer] -->|git push| B[📦 GitHub]
+    B -->|webhook| C[⚙️ GitHub Actions]
+    C -->|npm test| D{Tests Pass?}
+    D -->|✅ Yes| E[🐳 Build Docker]
+    D -->|❌ No| F[🚫 Fail Build]
+    E -->|docker push| G[📦 ECR]
+    G -->|trigger| H[🚀 ECS Deploy]
+    H -->|rolling update| I[🔄 New Tasks]
+    I -->|register| J[🎯 ALB Target]
+    J -->|health check| K{Healthy?}
+    K -->|✅ Yes| L[✨ Live Traffic]
+    K -->|❌ No| M[🔙 Rollback]
+    
+    style A fill:#e1f5ff
+    style L fill:#90EE90
+    style F fill:#FFB6C1
+    style M fill:#FFB6C1
+```
+
+---
+
+## 4. Network Topology
+
+```mermaid
+graph TB
+    subgraph "🌐 Internet"
+        Users[Users]
+    end
+    
+    subgraph "Public Layer"
+        IGW[Internet Gateway]
+        ALB[Application Load Balancer]
+        NAT[NAT Gateway x3]
+        Bastion[Bastion Host]
+    end
+    
+    subgraph "Application Layer"
+        ECS[ECS Fargate Tasks]
+        AutoScale[Auto Scaling]
+    end
+    
+    subgraph "Data Layer"
+        RDS[RDS PostgreSQL<br/>Multi-AZ<br/>Auto-scaling Storage]
+        Secrets[Secrets Manager]
+    end
+    
+    Users -->|HTTPS| IGW
+    IGW --> ALB
+    ALB --> ECS
+    ECS --> NAT
+    NAT --> IGW
+    ECS --> RDS
+    ECS -.-> Secrets
+    Users -.->|SSH| Bastion
+    Bastion -.-> RDS
+    AutoScale -.-> ECS
+    
+    classDef public fill:#e1f5ff,stroke:#0066cc,stroke-width:2px
+    classDef app fill:#fff4e6,stroke:#ff9900,stroke-width:2px
+    classDef data fill:#f0f9ff,stroke:#0099cc,stroke-width:2px
+    
+    class IGW,ALB,NAT,Bastion public
+    class ECS,AutoScale app
+    class RDS,Secrets data
+```
+
+---
+
+## 5. Security Architecture
+
+```mermaid
+graph TB
+    subgraph "Security Groups"
+        SG1[ALB SG<br/>Allow: 80, 443 from 0.0.0.0/0]
+        SG2[ECS SG<br/>Allow: All from ALB SG]
+        SG3[RDS SG<br/>Allow: 5432 from ECS SG]
+        SG4[Bastion SG<br/>Allow: 22 from 0.0.0.0/0]
+    end
+    
+    subgraph "IAM Roles"
+        Role1[ECS Task Execution<br/>Pull images, Write logs]
+        Role2[ECS Task Role<br/>Access Secrets Manager]
+    end
+    
+    subgraph "Encryption"
+        E1[RDS Encrypted at Rest]
+        E2[Secrets Encrypted]
+        E3[EBS Encrypted]
+    end
+    
+    SG1 --> SG2
+    SG2 --> SG3
+    SG4 --> SG3
+    Role1 -.-> Role2
+    
+    style SG1 fill:#FFE4E1
+    style SG2 fill:#FFE4E1
+    style SG3 fill:#FFE4E1
+    style SG4 fill:#FFE4E1
+    style E1 fill:#E0FFE0
+    style E2 fill:#E0FFE0
+    style E3 fill:#E0FFE0
+```
+
+---
+
+## 6. Auto-Scaling Logic
+
+```mermaid
+graph LR
+    A[CloudWatch Metrics] --> B{CPU > 70%?}
+    A --> C{Memory > 80%?}
+    B -->|Yes| D[Scale Out]
+    C -->|Yes| D
+    B -->|No| E{CPU < 30%?}
+    C -->|No| F{Memory < 40%?}
+    E -->|Yes| G[Scale In]
+    F -->|Yes| G
+    D --> H[Add Tasks]
+    G --> I[Remove Tasks]
+    H --> J[Update Target Group]
+    I --> J
+    J --> K[ALB Distributes Traffic]
+    
+    style D fill:#90EE90
+    style G fill:#FFB6C1
+    style K fill:#87CEEB
+```
+
+---
+
+## 7. Database Architecture (Production)
+
+```mermaid
+graph TB
+    subgraph "RDS PostgreSQL Production"
+        Primary[Primary Instance<br/>db.r6g.2xlarge<br/>Multi-AZ<br/>3000 IOPS baseline]
+        Standby[Standby Instance<br/>Different AZ<br/>Auto-failover]
+    end
+    
+    subgraph "Application"
+        AppPool[Connection Pool]
+    end
+    
+    subgraph "Storage"
+        Storage[gp3 Storage<br/>100GB-1TB<br/>Auto-scaling]
+    end
+    
+    AppPool -->|All Queries| Primary
+    Primary -.->|Sync Replication| Standby
+    Primary --> Storage
+    
+    Backup[Automated Backups<br/>35 days retention]
+    Primary -.-> Backup
+    
+    Monitor[Enhanced Monitoring<br/>Performance Insights]
+    Primary -.-> Monitor
+    
+    style Primary fill:#FFB6C1,stroke:#ff0000,stroke-width:3px
+    style Standby fill:#90EE90,stroke:#00ff00,stroke-width:2px
+    style Storage fill:#87CEEB,stroke:#0066cc,stroke-width:2px
+```
+
+---
+
+## 8. Cost Breakdown
+
+```mermaid
+pie title Monthly Cost (~$613)
+    "RDS Prod" : 200
+    "RDS Dev+Staging" : 150
+    "ECS Fargate" : 105
+    "NAT Gateways" : 96
+    "ALBs" : 48
+    "Bastion" : 7.5
+    "Secrets Manager" : 3.6
+    "ECR" : 3
+```
+
+---
+
+## How to Use
+
+1. **Collect live data:**
+   ```bash
+   ./collect-outputs.sh
+   ```
+
+2. **Visualize diagrams:**
+   - Copy any diagram above to https://mermaid.live
+   - Or open in VS Code with Mermaid extension
+   - Or push to GitHub (auto-renders)
+
+3. **Live endpoints in:** `infrastructure-outputs.json`

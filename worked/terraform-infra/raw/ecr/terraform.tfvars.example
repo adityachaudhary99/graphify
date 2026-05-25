@@ -1,0 +1,4 @@
+# ECR Configuration Example
+# Copy this file to terraform.tfvars and update with your values
+
+project = "my-app"  # Must match project name from VPC module
