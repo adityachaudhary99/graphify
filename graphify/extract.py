@@ -4765,7 +4765,7 @@ def extract_terraform(path: Path) -> dict:
             line = node.start_point[0] + 1
 
             if block_type == "locals":
-                block_nid = _make_id(stem, "locals")
+                block_nid = _make_id("locals")
                 label_text = "locals"
                 for child in node.children:
                     if child.type == "body":
@@ -4778,7 +4778,7 @@ def extract_terraform(path: Path) -> dict:
                                     add_node(attr_nid, attr_name, attr.start_point[0] + 1)
                                     add_edge(block_nid, attr_nid, "contains", attr.start_point[0] + 1)
             elif block_type == "terraform":
-                block_nid = _make_id(stem, "terraform")
+                block_nid = _make_id("terraform")
                 label_text = "terraform"
             else:
                 labels = []
@@ -4791,16 +4791,16 @@ def extract_terraform(path: Path) -> dict:
 
                 if block_type in ("resource", "data") and len(labels) >= 2:
                     label_text = f"{labels[0]}.{labels[1]}"
-                    block_nid = _make_id(stem, block_type, labels[0], labels[1])
+                    block_nid = _make_id(block_type, labels[0], labels[1])
                 elif block_type == "module" and len(labels) >= 1:
                     label_text = f"module.{labels[0]}"
-                    block_nid = _make_id(stem, "module", labels[0])
+                    block_nid = _make_id("module", labels[0])
                 elif block_type in ("variable", "output") and len(labels) >= 1:
                     label_text = labels[0]
-                    block_nid = _make_id(stem, block_type, labels[0])
+                    block_nid = _make_id(block_type, labels[0])
                 else:
                     label_text = block_type
-                    block_nid = _make_id(stem, block_type)
+                    block_nid = _make_id(block_type)
 
             add_node(block_nid, label_text, line)
             if parent_nid:
@@ -4870,35 +4870,39 @@ def extract_terraform(path: Path) -> dict:
                 if block_nid:
                     line = attr_node.start_point[0] + 1
                     block_refs.append((block_nid, ref_path, line))
+        else:
+            for child in node.children:
+                _walk_expr(child, attr_node)
 
     def _resolve_ref_to_nid(ref_path: str) -> str | None:
         parts = ref_path.split(".")
         if len(parts) >= 2:
             if parts[0] == "var":
-                return _make_id(stem, "variable", parts[1])
+                return _make_id("variable", parts[1])
             if parts[0] == "module":
-                return _make_id(stem, "module", parts[1])
+                return _make_id("module", parts[1])
             if parts[0] == "data":
                 if len(parts) >= 3:
-                    return _make_id(stem, "data", parts[1], parts[2])
+                    return _make_id("data", parts[1], parts[2])
             if parts[0] == "local":
-                return _make_id(stem, "locals", parts[1])
+                return _make_id("locals", parts[1])
             for i in range(1, len(parts)):
                 type_name = parts[i - 1]
                 name_part = parts[i]
-                candidate = _make_id(stem, "resource", type_name, name_part)
-                if candidate in seen_ids:
-                    return candidate
+                return _make_id("resource", type_name, name_part)
             return None
         return None
 
     find_refs(root)
 
+    unresolved_tf_refs = []
     for tgt_nid, ref_path, line in block_refs:
         if tgt_nid in seen_ids:
             add_edge(file_nid, tgt_nid, "references", line)
+        else:
+            unresolved_tf_refs.append({"ref_nid": tgt_nid, "line": line})
 
-    return {"nodes": nodes, "edges": edges}
+    return {"nodes": nodes, "edges": edges, "raw_tf_refs": unresolved_tf_refs}
 
 
 # ── Cross-file import resolution ──────────────────────────────────────────────
@@ -6270,6 +6274,45 @@ def _resolve_cross_file_java_imports(
 
         walk(tree.root_node)
 
+    return new_edges
+
+
+def _resolve_cross_file_tf_refs(
+    per_file: list[dict],
+    paths: list[Path],
+    root: Path,
+) -> list[dict]:
+    all_tf_nids: set[str] = set()
+    for result, path in zip(per_file, paths):
+        if path.suffix != ".tf":
+            continue
+        for n in result.get("nodes", []):
+            all_tf_nids.add(n["id"])
+
+    new_edges = []
+    for result, path in zip(per_file, paths):
+        if path.suffix != ".tf":
+            continue
+        try:
+            file_nid = _make_id(str(path.relative_to(root)))
+        except ValueError:
+            file_nid = _make_id(str(path))
+        existing_targets = {e["target"] for e in result.get("edges", []) if e.get("relation") == "references"}
+        for ref in result.get("raw_tf_refs", []):
+            ref_nid = ref["ref_nid"]
+            if ref_nid in existing_targets:
+                continue
+            if ref_nid in all_tf_nids:
+                new_edges.append({
+                    "source": file_nid,
+                    "target": ref_nid,
+                    "relation": "references",
+                    "confidence": "EXTRACTED",
+                    "confidence_score": 1.0,
+                    "source_file": str(path),
+                    "source_location": f"L{ref['line']}",
+                    "weight": 1.0,
+                })
     return new_edges
 
 
@@ -8414,6 +8457,16 @@ def extract(
         except Exception as exc:
             import logging
             logging.getLogger(__name__).warning("Java cross-file import resolution failed, skipping: %s", exc)
+
+    # Cross-file Terraform reference resolution
+    tf_paths = [p for p in paths if p.suffix == ".tf"]
+    if tf_paths:
+        tf_results = [r for r, p in zip(per_file, paths) if p.suffix == ".tf"]
+        try:
+            all_edges.extend(_resolve_cross_file_tf_refs(tf_results, tf_paths, root))
+        except Exception as exc:
+            import logging
+            logging.getLogger(__name__).warning("Terraform cross-file ref resolution failed, skipping: %s", exc)
 
     # Cross-file call resolution for all languages
     # Each extractor saved unresolved calls in raw_calls. Now that we have all
