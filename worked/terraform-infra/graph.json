@@ -1,0 +1,1587 @@
+{
+  "directed": false,
+  "multigraph": false,
+  "graph": {},
+  "nodes": [
+    {
+      "label": "compute.tf",
+      "file_type": "code",
+      "source_file": "compute.tf",
+      "source_location": "L1",
+      "id": "compute_tf",
+      "community": 0,
+      "norm_label": "compute.tf"
+    },
+    {
+      "label": "aws_ecs_cluster.main",
+      "file_type": "code",
+      "source_file": "compute.tf",
+      "source_location": "L1",
+      "id": "raw_compute_resource_aws_ecs_cluster_main",
+      "community": 0,
+      "norm_label": "aws_ecs_cluster.main"
+    },
+    {
+      "label": "setting",
+      "file_type": "code",
+      "source_file": "compute.tf",
+      "source_location": "L4",
+      "id": "raw_compute_setting",
+      "community": 0,
+      "norm_label": "setting"
+    },
+    {
+      "label": "aws_ecs_task_definition.app",
+      "file_type": "code",
+      "source_file": "compute.tf",
+      "source_location": "L14",
+      "id": "raw_compute_resource_aws_ecs_task_definition_app",
+      "community": 0,
+      "norm_label": "aws_ecs_task_definition.app"
+    },
+    {
+      "label": "aws_ecs_service.app",
+      "file_type": "code",
+      "source_file": "compute.tf",
+      "source_location": "L57",
+      "id": "raw_compute_resource_aws_ecs_service_app",
+      "community": 0,
+      "norm_label": "aws_ecs_service.app"
+    },
+    {
+      "label": "network_configuration",
+      "file_type": "code",
+      "source_file": "compute.tf",
+      "source_location": "L64",
+      "id": "raw_compute_network_configuration",
+      "community": 0,
+      "norm_label": "network_configuration"
+    },
+    {
+      "label": "load_balancer",
+      "file_type": "code",
+      "source_file": "compute.tf",
+      "source_location": "L70",
+      "id": "raw_compute_load_balancer",
+      "community": 0,
+      "norm_label": "load_balancer"
+    },
+    {
+      "label": "aws_lb.main",
+      "file_type": "code",
+      "source_file": "compute.tf",
+      "source_location": "L83",
+      "id": "raw_compute_resource_aws_lb_main",
+      "community": 0,
+      "norm_label": "aws_lb.main"
+    },
+    {
+      "label": "aws_lb_target_group.app",
+      "file_type": "code",
+      "source_file": "compute.tf",
+      "source_location": "L95",
+      "id": "raw_compute_resource_aws_lb_target_group_app",
+      "community": 0,
+      "norm_label": "aws_lb_target_group.app"
+    },
+    {
+      "label": "health_check",
+      "file_type": "code",
+      "source_file": "compute.tf",
+      "source_location": "L102",
+      "id": "raw_compute_health_check",
+      "community": 0,
+      "norm_label": "health_check"
+    },
+    {
+      "label": "aws_lb_listener.main",
+      "file_type": "code",
+      "source_file": "compute.tf",
+      "source_location": "L115",
+      "id": "raw_compute_resource_aws_lb_listener_main",
+      "community": 0,
+      "norm_label": "aws_lb_listener.main"
+    },
+    {
+      "label": "default_action",
+      "file_type": "code",
+      "source_file": "compute.tf",
+      "source_location": "L122",
+      "id": "raw_compute_default_action",
+      "community": 0,
+      "norm_label": "default_action"
+    },
+    {
+      "label": "aws_acm_certificate.main",
+      "file_type": "code",
+      "source_file": "compute.tf",
+      "source_location": "L128",
+      "id": "raw_compute_data_aws_acm_certificate_main",
+      "community": 0,
+      "norm_label": "aws_acm_certificate.main"
+    },
+    {
+      "label": "aws_iam_role.ecs_execution",
+      "file_type": "code",
+      "source_file": "compute.tf",
+      "source_location": "L133",
+      "id": "raw_compute_resource_aws_iam_role_ecs_execution",
+      "community": 0,
+      "norm_label": "aws_iam_role.ecs_execution"
+    },
+    {
+      "label": "aws_iam_role.ecs_task",
+      "file_type": "code",
+      "source_file": "compute.tf",
+      "source_location": "L158",
+      "id": "raw_compute_resource_aws_iam_role_ecs_task",
+      "community": 0,
+      "norm_label": "aws_iam_role.ecs_task"
+    },
+    {
+      "label": "aws_iam_role_policy.ecs_task_s3",
+      "file_type": "code",
+      "source_file": "compute.tf",
+      "source_location": "L179",
+      "id": "raw_compute_resource_aws_iam_role_policy_ecs_task_s3",
+      "community": 0,
+      "norm_label": "aws_iam_role_policy.ecs_task_s3"
+    },
+    {
+      "label": "aws_cloudwatch_log_group.app",
+      "file_type": "code",
+      "source_file": "compute.tf",
+      "source_location": "L202",
+      "id": "raw_compute_resource_aws_cloudwatch_log_group_app",
+      "community": 0,
+      "norm_label": "aws_cloudwatch_log_group.app"
+    },
+    {
+      "label": "aws_ecr_repository.app",
+      "file_type": "code",
+      "source_file": "compute.tf",
+      "source_location": "L211",
+      "id": "raw_compute_resource_aws_ecr_repository_app",
+      "community": 0,
+      "norm_label": "aws_ecr_repository.app"
+    },
+    {
+      "label": "image_scanning_configuration",
+      "file_type": "code",
+      "source_file": "compute.tf",
+      "source_location": "L215",
+      "id": "raw_compute_image_scanning_configuration",
+      "community": 0,
+      "norm_label": "image_scanning_configuration"
+    },
+    {
+      "label": "database.tf",
+      "file_type": "code",
+      "source_file": "database.tf",
+      "source_location": "L1",
+      "id": "database_tf",
+      "community": 7,
+      "norm_label": "database.tf"
+    },
+    {
+      "label": "aws_db_subnet_group.main",
+      "file_type": "code",
+      "source_file": "database.tf",
+      "source_location": "L1",
+      "id": "raw_database_resource_aws_db_subnet_group_main",
+      "community": 7,
+      "norm_label": "aws_db_subnet_group.main"
+    },
+    {
+      "label": "aws_db_parameter_group.postgres",
+      "file_type": "code",
+      "source_file": "database.tf",
+      "source_location": "L10",
+      "id": "raw_database_resource_aws_db_parameter_group_postgres",
+      "community": 7,
+      "norm_label": "aws_db_parameter_group.postgres"
+    },
+    {
+      "label": "parameter",
+      "file_type": "code",
+      "source_file": "database.tf",
+      "source_location": "L15",
+      "id": "raw_database_parameter",
+      "community": 7,
+      "norm_label": "parameter"
+    },
+    {
+      "label": "aws_db_instance.postgres",
+      "file_type": "code",
+      "source_file": "database.tf",
+      "source_location": "L30",
+      "id": "raw_database_resource_aws_db_instance_postgres",
+      "community": 7,
+      "norm_label": "aws_db_instance.postgres"
+    },
+    {
+      "label": "random_password.db_master",
+      "file_type": "code",
+      "source_file": "database.tf",
+      "source_location": "L56",
+      "id": "raw_database_resource_random_password_db_master",
+      "community": 7,
+      "norm_label": "random_password.db_master"
+    },
+    {
+      "label": "main.tf",
+      "file_type": "code",
+      "source_file": "main.tf",
+      "source_location": "L1",
+      "id": "main_tf",
+      "community": 6,
+      "norm_label": "main.tf"
+    },
+    {
+      "label": "terraform",
+      "file_type": "code",
+      "source_file": "main.tf",
+      "source_location": "L1",
+      "id": "raw_main_terraform",
+      "community": 6,
+      "norm_label": "terraform"
+    },
+    {
+      "label": "required_providers",
+      "file_type": "code",
+      "source_file": "main.tf",
+      "source_location": "L3",
+      "id": "raw_main_required_providers",
+      "community": 6,
+      "norm_label": "required_providers"
+    },
+    {
+      "label": "backend",
+      "file_type": "code",
+      "source_file": "main.tf",
+      "source_location": "L13",
+      "id": "raw_main_backend",
+      "community": 6,
+      "norm_label": "backend"
+    },
+    {
+      "label": "provider",
+      "file_type": "code",
+      "source_file": "main.tf",
+      "source_location": "L20",
+      "id": "raw_main_provider",
+      "community": 6,
+      "norm_label": "provider"
+    },
+    {
+      "label": "random_pet.suffix",
+      "file_type": "code",
+      "source_file": "main.tf",
+      "source_location": "L26",
+      "id": "raw_main_resource_random_pet_suffix",
+      "community": 6,
+      "norm_label": "random_pet.suffix"
+    },
+    {
+      "label": "monitoring.tf",
+      "file_type": "code",
+      "source_file": "monitoring.tf",
+      "source_location": "L1",
+      "id": "monitoring_tf",
+      "community": 3,
+      "norm_label": "monitoring.tf"
+    },
+    {
+      "label": "aws_cloudwatch_metric_alarm.cpu_high",
+      "file_type": "code",
+      "source_file": "monitoring.tf",
+      "source_location": "L1",
+      "id": "raw_monitoring_resource_aws_cloudwatch_metric_alarm_cpu_high",
+      "community": 3,
+      "norm_label": "aws_cloudwatch_metric_alarm.cpu_high"
+    },
+    {
+      "label": "aws_cloudwatch_metric_alarm.memory_high",
+      "file_type": "code",
+      "source_file": "monitoring.tf",
+      "source_location": "L23",
+      "id": "raw_monitoring_resource_aws_cloudwatch_metric_alarm_memory_high",
+      "community": 3,
+      "norm_label": "aws_cloudwatch_metric_alarm.memory_high"
+    },
+    {
+      "label": "aws_cloudwatch_metric_alarm.db_connections",
+      "file_type": "code",
+      "source_file": "monitoring.tf",
+      "source_location": "L45",
+      "id": "raw_monitoring_resource_aws_cloudwatch_metric_alarm_db_connections",
+      "community": 3,
+      "norm_label": "aws_cloudwatch_metric_alarm.db_connections"
+    },
+    {
+      "label": "aws_cloudwatch_metric_alarm.alb_5xx",
+      "file_type": "code",
+      "source_file": "monitoring.tf",
+      "source_location": "L66",
+      "id": "raw_monitoring_resource_aws_cloudwatch_metric_alarm_alb_5xx",
+      "community": 3,
+      "norm_label": "aws_cloudwatch_metric_alarm.alb_5xx"
+    },
+    {
+      "label": "aws_sns_topic.alerts",
+      "file_type": "code",
+      "source_file": "monitoring.tf",
+      "source_location": "L88",
+      "id": "raw_monitoring_resource_aws_sns_topic_alerts",
+      "community": 3,
+      "norm_label": "aws_sns_topic.alerts"
+    },
+    {
+      "label": "aws_sns_topic_subscription.alerts_email",
+      "file_type": "code",
+      "source_file": "monitoring.tf",
+      "source_location": "L96",
+      "id": "raw_monitoring_resource_aws_sns_topic_subscription_alerts_email",
+      "community": 3,
+      "norm_label": "aws_sns_topic_subscription.alerts_email"
+    },
+    {
+      "label": "networking.tf",
+      "file_type": "code",
+      "source_file": "networking.tf",
+      "source_location": "L1",
+      "id": "networking_tf",
+      "community": 2,
+      "norm_label": "networking.tf"
+    },
+    {
+      "label": "aws_vpc.main",
+      "file_type": "code",
+      "source_file": "networking.tf",
+      "source_location": "L1",
+      "id": "raw_networking_resource_aws_vpc_main",
+      "community": 2,
+      "norm_label": "aws_vpc.main"
+    },
+    {
+      "label": "aws_subnet.public",
+      "file_type": "code",
+      "source_file": "networking.tf",
+      "source_location": "L12",
+      "id": "raw_networking_resource_aws_subnet_public",
+      "community": 2,
+      "norm_label": "aws_subnet.public"
+    },
+    {
+      "label": "aws_subnet.private",
+      "file_type": "code",
+      "source_file": "networking.tf",
+      "source_location": "L26",
+      "id": "raw_networking_resource_aws_subnet_private",
+      "community": 2,
+      "norm_label": "aws_subnet.private"
+    },
+    {
+      "label": "aws_subnet.database",
+      "file_type": "code",
+      "source_file": "networking.tf",
+      "source_location": "L39",
+      "id": "raw_networking_resource_aws_subnet_database",
+      "community": 2,
+      "norm_label": "aws_subnet.database"
+    },
+    {
+      "label": "aws_internet_gateway.main",
+      "file_type": "code",
+      "source_file": "networking.tf",
+      "source_location": "L52",
+      "id": "raw_networking_resource_aws_internet_gateway_main",
+      "community": 2,
+      "norm_label": "aws_internet_gateway.main"
+    },
+    {
+      "label": "aws_eip.nat",
+      "file_type": "code",
+      "source_file": "networking.tf",
+      "source_location": "L61",
+      "id": "raw_networking_resource_aws_eip_nat",
+      "community": 2,
+      "norm_label": "aws_eip.nat"
+    },
+    {
+      "label": "aws_nat_gateway.main",
+      "file_type": "code",
+      "source_file": "networking.tf",
+      "source_location": "L70",
+      "id": "raw_networking_resource_aws_nat_gateway_main",
+      "community": 2,
+      "norm_label": "aws_nat_gateway.main"
+    },
+    {
+      "label": "aws_availability_zones.available",
+      "file_type": "code",
+      "source_file": "networking.tf",
+      "source_location": "L80",
+      "id": "raw_networking_data_aws_availability_zones_available",
+      "community": 2,
+      "norm_label": "aws_availability_zones.available"
+    },
+    {
+      "label": "aws_security_group.alb",
+      "file_type": "code",
+      "source_file": "networking.tf",
+      "source_location": "L84",
+      "id": "raw_networking_resource_aws_security_group_alb",
+      "community": 2,
+      "norm_label": "aws_security_group.alb"
+    },
+    {
+      "label": "ingress",
+      "file_type": "code",
+      "source_file": "networking.tf",
+      "source_location": "L89",
+      "id": "raw_networking_ingress",
+      "community": 2,
+      "norm_label": "ingress"
+    },
+    {
+      "label": "egress",
+      "file_type": "code",
+      "source_file": "networking.tf",
+      "source_location": "L103",
+      "id": "raw_networking_egress",
+      "community": 2,
+      "norm_label": "egress"
+    },
+    {
+      "label": "aws_security_group.ecs_tasks",
+      "file_type": "code",
+      "source_file": "networking.tf",
+      "source_location": "L116",
+      "id": "raw_networking_resource_aws_security_group_ecs_tasks",
+      "community": 2,
+      "norm_label": "aws_security_group.ecs_tasks"
+    },
+    {
+      "label": "aws_security_group.database",
+      "file_type": "code",
+      "source_file": "networking.tf",
+      "source_location": "L141",
+      "id": "raw_networking_resource_aws_security_group_database",
+      "community": 2,
+      "norm_label": "aws_security_group.database"
+    },
+    {
+      "label": "outputs.tf",
+      "file_type": "code",
+      "source_file": "outputs.tf",
+      "source_location": "L1",
+      "id": "outputs_tf",
+      "community": 4,
+      "norm_label": "outputs.tf"
+    },
+    {
+      "label": "vpc_id",
+      "file_type": "code",
+      "source_file": "outputs.tf",
+      "source_location": "L1",
+      "id": "raw_outputs_output_vpc_id",
+      "community": 4,
+      "norm_label": "vpc_id"
+    },
+    {
+      "label": "alb_dns_name",
+      "file_type": "code",
+      "source_file": "outputs.tf",
+      "source_location": "L6",
+      "id": "raw_outputs_output_alb_dns_name",
+      "community": 4,
+      "norm_label": "alb_dns_name"
+    },
+    {
+      "label": "ecs_cluster_name",
+      "file_type": "code",
+      "source_file": "outputs.tf",
+      "source_location": "L11",
+      "id": "raw_outputs_output_ecs_cluster_name",
+      "community": 4,
+      "norm_label": "ecs_cluster_name"
+    },
+    {
+      "label": "db_endpoint",
+      "file_type": "code",
+      "source_file": "outputs.tf",
+      "source_location": "L16",
+      "id": "raw_outputs_output_db_endpoint",
+      "community": 4,
+      "norm_label": "db_endpoint"
+    },
+    {
+      "label": "app_bucket",
+      "file_type": "code",
+      "source_file": "outputs.tf",
+      "source_location": "L22",
+      "id": "raw_outputs_output_app_bucket",
+      "community": 4,
+      "norm_label": "app_bucket"
+    },
+    {
+      "label": "sns_topic_arn",
+      "file_type": "code",
+      "source_file": "outputs.tf",
+      "source_location": "L27",
+      "id": "raw_outputs_output_sns_topic_arn",
+      "community": 4,
+      "norm_label": "sns_topic_arn"
+    },
+    {
+      "label": "storage.tf",
+      "file_type": "code",
+      "source_file": "storage.tf",
+      "source_location": "L1",
+      "id": "storage_tf",
+      "community": 1,
+      "norm_label": "storage.tf"
+    },
+    {
+      "label": "aws_s3_bucket.app",
+      "file_type": "code",
+      "source_file": "storage.tf",
+      "source_location": "L1",
+      "id": "raw_storage_resource_aws_s3_bucket_app",
+      "community": 1,
+      "norm_label": "aws_s3_bucket.app"
+    },
+    {
+      "label": "aws_s3_bucket_versioning.app",
+      "file_type": "code",
+      "source_file": "storage.tf",
+      "source_location": "L9",
+      "id": "raw_storage_resource_aws_s3_bucket_versioning_app",
+      "community": 1,
+      "norm_label": "aws_s3_bucket_versioning.app"
+    },
+    {
+      "label": "versioning_configuration",
+      "file_type": "code",
+      "source_file": "storage.tf",
+      "source_location": "L11",
+      "id": "raw_storage_versioning_configuration",
+      "community": 1,
+      "norm_label": "versioning_configuration"
+    },
+    {
+      "label": "aws_s3_bucket_server_side_encryption_configuration.app",
+      "file_type": "code",
+      "source_file": "storage.tf",
+      "source_location": "L16",
+      "id": "raw_storage_resource_aws_s3_bucket_server_side_encryption_configuration_app",
+      "community": 1,
+      "norm_label": "aws_s3_bucket_server_side_encryption_configuration.app"
+    },
+    {
+      "label": "rule",
+      "file_type": "code",
+      "source_file": "storage.tf",
+      "source_location": "L19",
+      "id": "raw_storage_rule",
+      "community": 1,
+      "norm_label": "rule"
+    },
+    {
+      "label": "apply_server_side_encryption_by_default",
+      "file_type": "code",
+      "source_file": "storage.tf",
+      "source_location": "L20",
+      "id": "raw_storage_apply_server_side_encryption_by_default",
+      "community": 1,
+      "norm_label": "apply_server_side_encryption_by_default"
+    },
+    {
+      "label": "aws_s3_bucket_public_access_block.app",
+      "file_type": "code",
+      "source_file": "storage.tf",
+      "source_location": "L26",
+      "id": "raw_storage_resource_aws_s3_bucket_public_access_block_app",
+      "community": 1,
+      "norm_label": "aws_s3_bucket_public_access_block.app"
+    },
+    {
+      "label": "aws_s3_bucket.logs",
+      "file_type": "code",
+      "source_file": "storage.tf",
+      "source_location": "L35",
+      "id": "raw_storage_resource_aws_s3_bucket_logs",
+      "community": 1,
+      "norm_label": "aws_s3_bucket.logs"
+    },
+    {
+      "label": "aws_s3_bucket_lifecycle_configuration.logs",
+      "file_type": "code",
+      "source_file": "storage.tf",
+      "source_location": "L43",
+      "id": "raw_storage_resource_aws_s3_bucket_lifecycle_configuration_logs",
+      "community": 1,
+      "norm_label": "aws_s3_bucket_lifecycle_configuration.logs"
+    },
+    {
+      "label": "expiration",
+      "file_type": "code",
+      "source_file": "storage.tf",
+      "source_location": "L50",
+      "id": "raw_storage_expiration",
+      "community": 1,
+      "norm_label": "expiration"
+    },
+    {
+      "label": "aws_s3_bucket.backups",
+      "file_type": "code",
+      "source_file": "storage.tf",
+      "source_location": "L56",
+      "id": "raw_storage_resource_aws_s3_bucket_backups",
+      "community": 1,
+      "norm_label": "aws_s3_bucket.backups"
+    },
+    {
+      "label": "aws_s3_bucket_versioning.backups",
+      "file_type": "code",
+      "source_file": "storage.tf",
+      "source_location": "L64",
+      "id": "raw_storage_resource_aws_s3_bucket_versioning_backups",
+      "community": 1,
+      "norm_label": "aws_s3_bucket_versioning.backups"
+    },
+    {
+      "label": "aws_s3_bucket_replication_configuration.backups",
+      "file_type": "code",
+      "source_file": "storage.tf",
+      "source_location": "L71",
+      "id": "raw_storage_resource_aws_s3_bucket_replication_configuration_backups",
+      "community": 1,
+      "norm_label": "aws_s3_bucket_replication_configuration.backups"
+    },
+    {
+      "label": "destination",
+      "file_type": "code",
+      "source_file": "storage.tf",
+      "source_location": "L79",
+      "id": "raw_storage_destination",
+      "community": 1,
+      "norm_label": "destination"
+    },
+    {
+      "label": "aws_s3_bucket.dr_backups",
+      "file_type": "code",
+      "source_file": "storage.tf",
+      "source_location": "L86",
+      "id": "raw_storage_resource_aws_s3_bucket_dr_backups",
+      "community": 1,
+      "norm_label": "aws_s3_bucket.dr_backups"
+    },
+    {
+      "label": "aws_iam_role.replication",
+      "file_type": "code",
+      "source_file": "storage.tf",
+      "source_location": "L95",
+      "id": "raw_storage_resource_aws_iam_role_replication",
+      "community": 1,
+      "norm_label": "aws_iam_role.replication"
+    },
+    {
+      "label": "aws_iam_role_policy.replication",
+      "file_type": "code",
+      "source_file": "storage.tf",
+      "source_location": "L116",
+      "id": "raw_storage_resource_aws_iam_role_policy_replication",
+      "community": 1,
+      "norm_label": "aws_iam_role_policy.replication"
+    },
+    {
+      "label": "variables.tf",
+      "file_type": "code",
+      "source_file": "variables.tf",
+      "source_location": "L1",
+      "id": "variables_tf",
+      "community": 5,
+      "norm_label": "variables.tf"
+    },
+    {
+      "label": "aws_region",
+      "file_type": "code",
+      "source_file": "variables.tf",
+      "source_location": "L1",
+      "id": "raw_variables_variable_aws_region",
+      "community": 5,
+      "norm_label": "aws_region"
+    },
+    {
+      "label": "environment",
+      "file_type": "code",
+      "source_file": "variables.tf",
+      "source_location": "L7",
+      "id": "raw_variables_variable_environment",
+      "community": 5,
+      "norm_label": "environment"
+    },
+    {
+      "label": "vpc_cidr",
+      "file_type": "code",
+      "source_file": "variables.tf",
+      "source_location": "L13",
+      "id": "raw_variables_variable_vpc_cidr",
+      "community": 5,
+      "norm_label": "vpc_cidr"
+    },
+    {
+      "label": "instance_count",
+      "file_type": "code",
+      "source_file": "variables.tf",
+      "source_location": "L19",
+      "id": "raw_variables_variable_instance_count",
+      "community": 5,
+      "norm_label": "instance_count"
+    },
+    {
+      "label": "db_instance_class",
+      "file_type": "code",
+      "source_file": "variables.tf",
+      "source_location": "L25",
+      "id": "raw_variables_variable_db_instance_class",
+      "community": 5,
+      "norm_label": "db_instance_class"
+    },
+    {
+      "label": "app_port",
+      "file_type": "code",
+      "source_file": "variables.tf",
+      "source_location": "L31",
+      "id": "raw_variables_variable_app_port",
+      "community": 5,
+      "norm_label": "app_port"
+    }
+  ],
+  "links": [
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "compute.tf",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "compute_tf",
+      "target": "raw_compute_resource_aws_ecs_cluster_main",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "compute.tf",
+      "source_location": "L14",
+      "weight": 1.0,
+      "source": "compute_tf",
+      "target": "raw_compute_resource_aws_ecs_task_definition_app",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "compute.tf",
+      "source_location": "L57",
+      "weight": 1.0,
+      "source": "compute_tf",
+      "target": "raw_compute_resource_aws_ecs_service_app",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "compute.tf",
+      "source_location": "L83",
+      "weight": 1.0,
+      "source": "compute_tf",
+      "target": "raw_compute_resource_aws_lb_main",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "compute.tf",
+      "source_location": "L95",
+      "weight": 1.0,
+      "source": "compute_tf",
+      "target": "raw_compute_resource_aws_lb_target_group_app",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "compute.tf",
+      "source_location": "L115",
+      "weight": 1.0,
+      "source": "compute_tf",
+      "target": "raw_compute_resource_aws_lb_listener_main",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "compute.tf",
+      "source_location": "L128",
+      "weight": 1.0,
+      "source": "compute_tf",
+      "target": "raw_compute_data_aws_acm_certificate_main",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "compute.tf",
+      "source_location": "L133",
+      "weight": 1.0,
+      "source": "compute_tf",
+      "target": "raw_compute_resource_aws_iam_role_ecs_execution",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "compute.tf",
+      "source_location": "L158",
+      "weight": 1.0,
+      "source": "compute_tf",
+      "target": "raw_compute_resource_aws_iam_role_ecs_task",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "compute.tf",
+      "source_location": "L179",
+      "weight": 1.0,
+      "source": "compute_tf",
+      "target": "raw_compute_resource_aws_iam_role_policy_ecs_task_s3",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "compute.tf",
+      "source_location": "L202",
+      "weight": 1.0,
+      "source": "compute_tf",
+      "target": "raw_compute_resource_aws_cloudwatch_log_group_app",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "compute.tf",
+      "source_location": "L211",
+      "weight": 1.0,
+      "source": "compute_tf",
+      "target": "raw_compute_resource_aws_ecr_repository_app",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "compute.tf",
+      "source_location": "L4",
+      "weight": 1.0,
+      "source": "raw_compute_resource_aws_ecs_cluster_main",
+      "target": "raw_compute_setting",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "compute.tf",
+      "source_location": "L64",
+      "weight": 1.0,
+      "source": "raw_compute_resource_aws_ecs_service_app",
+      "target": "raw_compute_network_configuration",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "compute.tf",
+      "source_location": "L70",
+      "weight": 1.0,
+      "source": "raw_compute_resource_aws_ecs_service_app",
+      "target": "raw_compute_load_balancer",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "compute.tf",
+      "source_location": "L102",
+      "weight": 1.0,
+      "source": "raw_compute_resource_aws_lb_target_group_app",
+      "target": "raw_compute_health_check",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "compute.tf",
+      "source_location": "L122",
+      "weight": 1.0,
+      "source": "raw_compute_resource_aws_lb_listener_main",
+      "target": "raw_compute_default_action",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "compute.tf",
+      "source_location": "L215",
+      "weight": 1.0,
+      "source": "raw_compute_resource_aws_ecr_repository_app",
+      "target": "raw_compute_image_scanning_configuration",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "database.tf",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "database_tf",
+      "target": "raw_database_resource_aws_db_subnet_group_main",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "database.tf",
+      "source_location": "L10",
+      "weight": 1.0,
+      "source": "database_tf",
+      "target": "raw_database_resource_aws_db_parameter_group_postgres",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "database.tf",
+      "source_location": "L30",
+      "weight": 1.0,
+      "source": "database_tf",
+      "target": "raw_database_resource_aws_db_instance_postgres",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "database.tf",
+      "source_location": "L56",
+      "weight": 1.0,
+      "source": "database_tf",
+      "target": "raw_database_resource_random_password_db_master",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "database.tf",
+      "source_location": "L20",
+      "weight": 1.0,
+      "source": "raw_database_resource_aws_db_parameter_group_postgres",
+      "target": "raw_database_parameter",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "main.tf",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "main_tf",
+      "target": "raw_main_terraform",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "main.tf",
+      "source_location": "L24",
+      "weight": 1.0,
+      "source": "main_tf",
+      "target": "raw_main_provider",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "main.tf",
+      "source_location": "L26",
+      "weight": 1.0,
+      "source": "main_tf",
+      "target": "raw_main_resource_random_pet_suffix",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "main.tf",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "raw_main_terraform",
+      "target": "raw_main_required_providers",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "main.tf",
+      "source_location": "L13",
+      "weight": 1.0,
+      "source": "raw_main_terraform",
+      "target": "raw_main_backend",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "monitoring.tf",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "monitoring_tf",
+      "target": "raw_monitoring_resource_aws_cloudwatch_metric_alarm_cpu_high",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "monitoring.tf",
+      "source_location": "L23",
+      "weight": 1.0,
+      "source": "monitoring_tf",
+      "target": "raw_monitoring_resource_aws_cloudwatch_metric_alarm_memory_high",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "monitoring.tf",
+      "source_location": "L45",
+      "weight": 1.0,
+      "source": "monitoring_tf",
+      "target": "raw_monitoring_resource_aws_cloudwatch_metric_alarm_db_connections",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "monitoring.tf",
+      "source_location": "L66",
+      "weight": 1.0,
+      "source": "monitoring_tf",
+      "target": "raw_monitoring_resource_aws_cloudwatch_metric_alarm_alb_5xx",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "monitoring.tf",
+      "source_location": "L88",
+      "weight": 1.0,
+      "source": "monitoring_tf",
+      "target": "raw_monitoring_resource_aws_sns_topic_alerts",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "monitoring.tf",
+      "source_location": "L96",
+      "weight": 1.0,
+      "source": "monitoring_tf",
+      "target": "raw_monitoring_resource_aws_sns_topic_subscription_alerts_email",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "networking.tf",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "networking_tf",
+      "target": "raw_networking_resource_aws_vpc_main",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "networking.tf",
+      "source_location": "L12",
+      "weight": 1.0,
+      "source": "networking_tf",
+      "target": "raw_networking_resource_aws_subnet_public",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "networking.tf",
+      "source_location": "L26",
+      "weight": 1.0,
+      "source": "networking_tf",
+      "target": "raw_networking_resource_aws_subnet_private",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "networking.tf",
+      "source_location": "L39",
+      "weight": 1.0,
+      "source": "networking_tf",
+      "target": "raw_networking_resource_aws_subnet_database",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "networking.tf",
+      "source_location": "L52",
+      "weight": 1.0,
+      "source": "networking_tf",
+      "target": "raw_networking_resource_aws_internet_gateway_main",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "networking.tf",
+      "source_location": "L61",
+      "weight": 1.0,
+      "source": "networking_tf",
+      "target": "raw_networking_resource_aws_eip_nat",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "networking.tf",
+      "source_location": "L70",
+      "weight": 1.0,
+      "source": "networking_tf",
+      "target": "raw_networking_resource_aws_nat_gateway_main",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "networking.tf",
+      "source_location": "L80",
+      "weight": 1.0,
+      "source": "networking_tf",
+      "target": "raw_networking_data_aws_availability_zones_available",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "networking.tf",
+      "source_location": "L84",
+      "weight": 1.0,
+      "source": "networking_tf",
+      "target": "raw_networking_resource_aws_security_group_alb",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "networking.tf",
+      "source_location": "L116",
+      "weight": 1.0,
+      "source": "networking_tf",
+      "target": "raw_networking_resource_aws_security_group_ecs_tasks",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "networking.tf",
+      "source_location": "L141",
+      "weight": 1.0,
+      "source": "networking_tf",
+      "target": "raw_networking_resource_aws_security_group_database",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "networking.tf",
+      "source_location": "L96",
+      "weight": 1.0,
+      "source": "raw_networking_resource_aws_security_group_alb",
+      "target": "raw_networking_ingress",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "networking.tf",
+      "source_location": "L103",
+      "weight": 1.0,
+      "source": "raw_networking_resource_aws_security_group_alb",
+      "target": "raw_networking_egress",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "networking.tf",
+      "source_location": "L121",
+      "weight": 1.0,
+      "source": "raw_networking_resource_aws_security_group_ecs_tasks",
+      "target": "raw_networking_ingress",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "networking.tf",
+      "source_location": "L146",
+      "weight": 1.0,
+      "source": "raw_networking_resource_aws_security_group_database",
+      "target": "raw_networking_ingress",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "networking.tf",
+      "source_location": "L128",
+      "weight": 1.0,
+      "source": "raw_networking_resource_aws_security_group_ecs_tasks",
+      "target": "raw_networking_egress",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "outputs.tf",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "outputs_tf",
+      "target": "raw_outputs_output_vpc_id",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "outputs.tf",
+      "source_location": "L6",
+      "weight": 1.0,
+      "source": "outputs_tf",
+      "target": "raw_outputs_output_alb_dns_name",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "outputs.tf",
+      "source_location": "L11",
+      "weight": 1.0,
+      "source": "outputs_tf",
+      "target": "raw_outputs_output_ecs_cluster_name",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "outputs.tf",
+      "source_location": "L16",
+      "weight": 1.0,
+      "source": "outputs_tf",
+      "target": "raw_outputs_output_db_endpoint",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "outputs.tf",
+      "source_location": "L22",
+      "weight": 1.0,
+      "source": "outputs_tf",
+      "target": "raw_outputs_output_app_bucket",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "outputs.tf",
+      "source_location": "L27",
+      "weight": 1.0,
+      "source": "outputs_tf",
+      "target": "raw_outputs_output_sns_topic_arn",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "storage.tf",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "storage_tf",
+      "target": "raw_storage_resource_aws_s3_bucket_app",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "storage.tf",
+      "source_location": "L9",
+      "weight": 1.0,
+      "source": "storage_tf",
+      "target": "raw_storage_resource_aws_s3_bucket_versioning_app",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "storage.tf",
+      "source_location": "L16",
+      "weight": 1.0,
+      "source": "storage_tf",
+      "target": "raw_storage_resource_aws_s3_bucket_server_side_encryption_configuration_app",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "storage.tf",
+      "source_location": "L26",
+      "weight": 1.0,
+      "source": "storage_tf",
+      "target": "raw_storage_resource_aws_s3_bucket_public_access_block_app",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "storage.tf",
+      "source_location": "L35",
+      "weight": 1.0,
+      "source": "storage_tf",
+      "target": "raw_storage_resource_aws_s3_bucket_logs",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "storage.tf",
+      "source_location": "L43",
+      "weight": 1.0,
+      "source": "storage_tf",
+      "target": "raw_storage_resource_aws_s3_bucket_lifecycle_configuration_logs",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "storage.tf",
+      "source_location": "L56",
+      "weight": 1.0,
+      "source": "storage_tf",
+      "target": "raw_storage_resource_aws_s3_bucket_backups",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "storage.tf",
+      "source_location": "L64",
+      "weight": 1.0,
+      "source": "storage_tf",
+      "target": "raw_storage_resource_aws_s3_bucket_versioning_backups",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "storage.tf",
+      "source_location": "L71",
+      "weight": 1.0,
+      "source": "storage_tf",
+      "target": "raw_storage_resource_aws_s3_bucket_replication_configuration_backups",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "storage.tf",
+      "source_location": "L86",
+      "weight": 1.0,
+      "source": "storage_tf",
+      "target": "raw_storage_resource_aws_s3_bucket_dr_backups",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "storage.tf",
+      "source_location": "L95",
+      "weight": 1.0,
+      "source": "storage_tf",
+      "target": "raw_storage_resource_aws_iam_role_replication",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "storage.tf",
+      "source_location": "L116",
+      "weight": 1.0,
+      "source": "storage_tf",
+      "target": "raw_storage_resource_aws_iam_role_policy_replication",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "storage.tf",
+      "source_location": "L11",
+      "weight": 1.0,
+      "source": "raw_storage_resource_aws_s3_bucket_versioning_app",
+      "target": "raw_storage_versioning_configuration",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "storage.tf",
+      "source_location": "L66",
+      "weight": 1.0,
+      "source": "raw_storage_resource_aws_s3_bucket_versioning_backups",
+      "target": "raw_storage_versioning_configuration",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "storage.tf",
+      "source_location": "L19",
+      "weight": 1.0,
+      "source": "raw_storage_resource_aws_s3_bucket_server_side_encryption_configuration_app",
+      "target": "raw_storage_rule",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "storage.tf",
+      "source_location": "L20",
+      "weight": 1.0,
+      "source": "raw_storage_rule",
+      "target": "raw_storage_apply_server_side_encryption_by_default",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "storage.tf",
+      "source_location": "L46",
+      "weight": 1.0,
+      "source": "raw_storage_resource_aws_s3_bucket_lifecycle_configuration_logs",
+      "target": "raw_storage_rule",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "storage.tf",
+      "source_location": "L50",
+      "weight": 1.0,
+      "source": "raw_storage_rule",
+      "target": "raw_storage_expiration",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "storage.tf",
+      "source_location": "L75",
+      "weight": 1.0,
+      "source": "raw_storage_resource_aws_s3_bucket_replication_configuration_backups",
+      "target": "raw_storage_rule",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "storage.tf",
+      "source_location": "L79",
+      "weight": 1.0,
+      "source": "raw_storage_rule",
+      "target": "raw_storage_destination",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "variables.tf",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "variables_tf",
+      "target": "raw_variables_variable_aws_region",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "variables.tf",
+      "source_location": "L7",
+      "weight": 1.0,
+      "source": "variables_tf",
+      "target": "raw_variables_variable_environment",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "variables.tf",
+      "source_location": "L13",
+      "weight": 1.0,
+      "source": "variables_tf",
+      "target": "raw_variables_variable_vpc_cidr",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "variables.tf",
+      "source_location": "L19",
+      "weight": 1.0,
+      "source": "variables_tf",
+      "target": "raw_variables_variable_instance_count",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "variables.tf",
+      "source_location": "L25",
+      "weight": 1.0,
+      "source": "variables_tf",
+      "target": "raw_variables_variable_db_instance_class",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "variables.tf",
+      "source_location": "L31",
+      "weight": 1.0,
+      "source": "variables_tf",
+      "target": "raw_variables_variable_app_port",
+      "confidence_score": 1.0
+    }
+  ],
+  "hyperedges": [],
+  "built_at_commit": "43baaf1950451bee0b3693957adc082647d9622a"
+}
