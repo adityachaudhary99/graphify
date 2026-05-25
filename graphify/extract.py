@@ -4699,6 +4699,208 @@ def extract_powershell(path: Path) -> dict:
     return {"nodes": nodes, "edges": clean_edges, "raw_calls": raw_calls}
 
 
+# ── Terraform / HCL ───────────────────────────────────────────────────────────
+
+def extract_terraform(path: Path) -> dict:
+    """Extract resources, variables, outputs, modules, and data sources from a .tf file."""
+    try:
+        import tree_sitter_hcl as tshcl
+        from tree_sitter import Language, Parser
+    except ImportError:
+        return {"nodes": [], "edges": [], "error": "tree_sitter_hcl not installed"}
+
+    try:
+        language = Language(tshcl.language())
+        parser = Parser(language)
+        source = path.read_bytes()
+        tree = parser.parse(source)
+        root = tree.root_node
+    except Exception as e:
+        return {"nodes": [], "edges": [], "error": str(e)}
+
+    stem = _file_stem(path)
+    str_path = str(path)
+    nodes: list[dict] = []
+    edges: list[dict] = []
+    seen_ids: set[str] = set()
+
+    def add_node(nid: str, label: str, line: int) -> None:
+        if nid not in seen_ids:
+            seen_ids.add(nid)
+            nodes.append({"id": nid, "label": label, "file_type": "code",
+                          "source_file": str_path, "source_location": f"L{line}"})
+
+    def add_edge(src: str, tgt: str, relation: str, line: int,
+                 confidence: str = "EXTRACTED", weight: float = 1.0,
+                 context: str | None = None) -> None:
+        edge = {"source": src, "target": tgt, "relation": relation,
+                "confidence": confidence, "source_file": str_path,
+                "source_location": f"L{line}", "weight": weight}
+        if context:
+            edge["context"] = context
+        edges.append(edge)
+
+    file_nid = _make_id(str(path))
+    add_node(file_nid, path.name, 1)
+
+    def _block_label(node) -> str:
+        for child in node.children:
+            if child.type == "string_lit":
+                raw = _read_text(child, source)
+                return raw.strip('"')
+        return ""
+
+    def _block_type(node) -> str:
+        for child in node.children:
+            if child.type == "identifier":
+                return _read_text(child, source)
+        return ""
+
+    def walk(node, parent_nid: str | None = None) -> None:
+        if node.type == "block":
+            block_type = _block_type(node)
+            if not block_type:
+                return
+
+            line = node.start_point[0] + 1
+
+            if block_type == "locals":
+                block_nid = _make_id(stem, "locals")
+                label_text = "locals"
+                for child in node.children:
+                    if child.type == "body":
+                        for attr in child.children:
+                            if attr.type == "attribute":
+                                attr_name_node = attr.child_by_field_name("name")
+                                if attr_name_node:
+                                    attr_name = _read_text(attr_name_node, source)
+                                    attr_nid = _make_id(block_nid, attr_name)
+                                    add_node(attr_nid, attr_name, attr.start_point[0] + 1)
+                                    add_edge(block_nid, attr_nid, "contains", attr.start_point[0] + 1)
+            elif block_type == "terraform":
+                block_nid = _make_id(stem, "terraform")
+                label_text = "terraform"
+            else:
+                labels = []
+                for child in node.children:
+                    if child.type == "string_lit":
+                        lbl = _read_text(child, source).strip('"')
+                        labels.append(lbl)
+                        if len(labels) >= 2:
+                            break
+
+                if block_type in ("resource", "data") and len(labels) >= 2:
+                    label_text = f"{labels[0]}.{labels[1]}"
+                    block_nid = _make_id(stem, block_type, labels[0], labels[1])
+                elif block_type == "module" and len(labels) >= 1:
+                    label_text = f"module.{labels[0]}"
+                    block_nid = _make_id(stem, "module", labels[0])
+                elif block_type in ("variable", "output") and len(labels) >= 1:
+                    label_text = labels[0]
+                    block_nid = _make_id(stem, block_type, labels[0])
+                else:
+                    label_text = block_type
+                    block_nid = _make_id(stem, block_type)
+
+            add_node(block_nid, label_text, line)
+            if parent_nid:
+                add_edge(parent_nid, block_nid, "contains", line)
+            else:
+                add_edge(file_nid, block_nid, "contains", line)
+
+            for child in node.children:
+                if child.type == "body":
+                    for sub in child.children:
+                        if sub.type == "block":
+                            walk(sub, block_nid)
+                        elif sub.type == "attribute":
+                            attr_name_node = sub.child_by_field_name("name")
+                            if attr_name_node:
+                                attr_name = _read_text(attr_name_node, source)
+                                attr_nid = _make_id(block_nid, attr_name)
+                                add_node(attr_nid, attr_name, sub.start_point[0] + 1)
+                                add_edge(block_nid, attr_nid, "contains", sub.start_point[0] + 1)
+            return
+
+        for child in node.children:
+            walk(child, parent_nid)
+
+    for child in root.children:
+        if child.type == "body":
+            for sub in child.children:
+                if sub.type == "block":
+                    walk(sub, None)
+            break
+
+    block_refs: list[tuple[str, str, int]] = []
+
+    def find_refs(node) -> None:
+        if node.type == "attribute":
+            for child in node.children:
+                if child.type == "expression":
+                    _walk_expr(child, node)
+        for child in node.children:
+            find_refs(child)
+
+    def _walk_expr(node, attr_node) -> None:
+        if node.type == "variable_expr":
+            var_name_node = node.child_by_field_name("name")
+            if not var_name_node:
+                for child in node.children:
+                    if child.type == "identifier":
+                        var_name_node = child
+                        break
+            if var_name_node:
+                var_name = _read_text(var_name_node, source)
+                ref_parts = [var_name]
+                parent = node.parent
+                if parent:
+                    siblings = list(parent.children)
+                    idx = siblings.index(node)
+                    for sib in siblings[idx + 1:]:
+                        if sib.type == "get_attr":
+                            for sc in sib.children:
+                                if sc.type == "identifier":
+                                    ref_parts.append(_read_text(sc, source))
+                                    break
+                        else:
+                            break
+                ref_path = ".".join(ref_parts)
+                block_nid = _resolve_ref_to_nid(ref_path)
+                if block_nid:
+                    line = attr_node.start_point[0] + 1
+                    block_refs.append((block_nid, ref_path, line))
+
+    def _resolve_ref_to_nid(ref_path: str) -> str | None:
+        parts = ref_path.split(".")
+        if len(parts) >= 2:
+            if parts[0] == "var":
+                return _make_id(stem, "variable", parts[1])
+            if parts[0] == "module":
+                return _make_id(stem, "module", parts[1])
+            if parts[0] == "data":
+                if len(parts) >= 3:
+                    return _make_id(stem, "data", parts[1], parts[2])
+            if parts[0] == "local":
+                return _make_id(stem, "locals", parts[1])
+            for i in range(1, len(parts)):
+                type_name = parts[i - 1]
+                name_part = parts[i]
+                candidate = _make_id(stem, "resource", type_name, name_part)
+                if candidate in seen_ids:
+                    return candidate
+            return None
+        return None
+
+    find_refs(root)
+
+    for tgt_nid, ref_path, line in block_refs:
+        if tgt_nid in seen_ids:
+            add_edge(file_nid, tgt_nid, "references", line)
+
+    return {"nodes": nodes, "edges": edges}
+
+
 # ── Cross-file import resolution ──────────────────────────────────────────────
 
 def _source_key(source_file: str, root: Path) -> str:
@@ -7891,6 +8093,7 @@ _DISPATCH: dict[str, Any] = {
     ".dart": extract_dart,
     ".v": extract_verilog,
     ".sv": extract_verilog,
+    ".tf": extract_terraform,
     ".sql": extract_sql,
     ".md": extract_markdown,
     ".mdx": extract_markdown,

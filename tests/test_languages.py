@@ -6,7 +6,7 @@ from graphify.extract import (
     extract_java, extract_c, extract_cpp, extract_ruby,
     extract_csharp, extract_kotlin, extract_scala, extract_php,
     extract_swift, extract_go, extract_julia, extract_js, extract_fortran,
-    extract_groovy,
+    extract_groovy, extract_terraform,
 )
 
 FIXTURES = Path(__file__).parent / "fixtures"
@@ -1055,6 +1055,66 @@ def test_groovy_spock_preserves_import_edges():
 
 def test_groovy_spock_no_dangling_edges():
     r = extract_groovy(FIXTURES / "sample_spock.groovy")
+    node_ids = {n["id"] for n in r["nodes"]}
+    for e in r["edges"]:
+        assert e["source"] in node_ids
+
+
+# ── Terraform ──────────────────────────────────────────────────────────────────
+
+
+def test_terraform_no_error():
+    r = extract_terraform(FIXTURES / "sample.tf")
+    assert "error" not in r
+
+
+def test_terraform_finds_resources():
+    r = extract_terraform(FIXTURES / "sample.tf")
+    labels = [n["label"] for n in r["nodes"]]
+    assert any("aws_instance" in l for l in labels)
+    assert any("aws_s3_bucket" in l for l in labels)
+
+
+def test_terraform_finds_variables():
+    r = extract_terraform(FIXTURES / "sample.tf")
+    labels = [n["label"] for n in r["nodes"]]
+    assert "region" in labels
+    assert "instance_count" in labels
+
+
+def test_terraform_finds_outputs():
+    r = extract_terraform(FIXTURES / "sample.tf")
+    labels = [n["label"] for n in r["nodes"]]
+    assert "instance_ip" in labels
+    assert "bucket_arn" in labels
+
+
+def test_terraform_finds_locals():
+    r = extract_terraform(FIXTURES / "sample.tf")
+    labels = [n["label"] for n in r["nodes"]]
+    assert "locals" in labels
+
+
+def test_terraform_finds_data_sources():
+    r = extract_terraform(FIXTURES / "sample.tf")
+    labels = [n["label"] for n in r["nodes"]]
+    assert any("aws_ami" in l for l in labels)
+
+
+def test_terraform_finds_modules():
+    r = extract_terraform(FIXTURES / "sample.tf")
+    labels = [n["label"] for n in r["nodes"]]
+    assert any("module." in l for l in labels)
+
+
+def test_terraform_contains_edges():
+    r = extract_terraform(FIXTURES / "sample.tf")
+    relations = {e["relation"] for e in r["edges"]}
+    assert "contains" in relations
+
+
+def test_terraform_no_dangling_edges():
+    r = extract_terraform(FIXTURES / "sample.tf")
     node_ids = {n["id"] for n in r["nodes"]}
     for e in r["edges"]:
         assert e["source"] in node_ids
