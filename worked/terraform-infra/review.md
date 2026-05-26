@@ -1,27 +1,43 @@
-# Worked Example Review
+# Worked Example — Observations
 
 ## Summary
 
-The Terraform extractor was tested against a production-grade multi-environment infrastructure template. The results confirm it handles real-world Terraform patterns correctly.
+Ran the experimental Terraform extractor against a multi-environment AWS infrastructure template (54 `.tf` files across 8 modules: VPC, ALB, ECS, ECR, RDS, Bastion, Route53, security groups). Observations below; not claims of completeness.
 
-## What worked well
+## What the run produced
 
-- **All block types extracted**: resources, data sources, variables, outputs, modules, locals, and terraform settings are all captured as typed nodes with `contains` hierarchy edges.
-- **Attribute-level granularity**: Individual configuration values (e.g., `instance_type`, `bucket`, `vpc_id`) are extracted as child nodes of their parent blocks, preserving the full AST structure.
-- **Cross-file references resolve correctly**: 168 reference edges were created across file boundaries — from `ecs/main.tf` referencing `aws_vpc.main` defined in `vpc/main.tf`, to `route53/main.tf` consuming `aws_lb.main.dns_name` from `alb/main.tf`. The stem-independent nid scheme (`resource_aws_vpc_main` instead of `raw_ecs_resource_aws_vpc_main`) makes this possible.
-- **Module boundary patterns**: The `outputs.tf` files serve as interface layers, with 58 references originating from output declarations. This matches the standard Terraform module pattern where outputs expose internal resources.
+- **Block-type coverage observed in the output:** the seven HCL block types in this corpus (resource, data, module, variable, output, locals, terraform settings) appear as typed nodes with `contains` hierarchy edges. Provider blocks are not present in this corpus; coverage on those was not exercised.
+- **Attribute-level granularity (opinionated):** the current extractor emits individual configuration values (e.g., `instance_type`, `bucket`, `vpc_id`) as child nodes of their parent blocks. This is a denser graph than block-level-only extraction. Whether this density is the right default is a design question, not a fact.
+- **Cross-file reference edges observed:** 168 `references` edges were created across file boundaries — e.g., `ecs/main.tf` referencing `aws_vpc.main` declared in `vpc/main.tf`, and `route53/main.tf` consuming `aws_lb.main.dns_name` from `alb/main.tf`. This is enabled by the stem-independent nid scheme, which has a known trade-off: same-named resources across distinct modules collapse to one node (not the case in this corpus, but worth flagging for multi-module deployments).
+- **`outputs.tf` as interface layer:** 58 of the 168 cross-file references originate from `output` declarations. Consistent with how the Terraform community typically structures module boundaries, but this is a description of this corpus, not a benchmark.
 
-## Graph quality
+## Graph properties (as measured on this run)
 
-- **100% EXTRACTED confidence**: Every edge comes from AST analysis, not inference. No phantom nodes or spurious connections.
-- **God nodes are meaningful**: `variable_domain_name` (10 refs), `resource_aws_vpc_main` (9 refs), and `resource_aws_lb_main` (5 refs) are genuinely the most important shared dependencies.
-- **No missing edges**: All attribute references in the source code (e.g., `var.vpc_id`, `aws_lb.main.dns_name`, `module.vpc.vpc_id`) are captured as `references` edges in the graph.
+| Metric | Value |
+|---|---|
+| Files | 54 |
+| Modules | 8 |
+| Nodes | 608 |
+| Edges | 733 |
+| Cross-file `references` edges | 168 |
+| Parse errors | 0 |
+| Edges with `confidence: EXTRACTED` | 733 (all) |
 
-## Areas for improvement
+Highest in-degree nodes in the run: `variable_domain_name` (10 references), `resource_aws_vpc_main` (9 references), `resource_aws_lb_main` (5 references). These correspond to the most-shared dependencies in the template.
 
-- The extractor captures `contains` edges but not read/write semantic relationships. For example, a reference to `var.region` in a resource block could be tagged as a "reads" edge.
-- Multi-file locals and terraform blocks use stem-independent nids (`locals`, `terraform`), which is correct for merging behavior but could benefit from source-file attribution in the node metadata.
+## Known limitations of the extractor used in this run
 
-## Bottom line
+- The stem-independent nid scheme treats two `modules/X/main.tf` files declaring same-named resources as one node. Not exercised here but a real risk on larger multi-module repos.
+- The resource-reference resolver in this branch returns the first nid candidate without an existence check, which can produce phantom edges when an attribute access incidentally matches the `<word>.<word>` shape.
+- No diagnostics for unresolved refs — they are silently dropped.
+- No secret scrubbing on persisted strings; for production use the diagnostics + scrubbing in [PR #416](https://github.com/safishamsi/graphify/pull/416) are the better foundation.
 
-The Terraform extractor is production-ready. It handles a real 54-file, 8-module project without errors, producing a complete and accurate knowledge graph.
+## What this run does NOT establish
+
+- **Not** that "all references in the corpus are captured" — that would require an oracle for "all references that exist" and no such oracle was constructed.
+- **Not** that the extractor is production-ready — see limitations above.
+- **Not** a benchmark against alternative extractors (e.g., #416) — different design choices; no head-to-head ran.
+
+## Useful as
+
+A reference graph for talking about what Graphify-style indexing reveals about real Terraform corpora — module boundaries, shared dependencies, output-layer fan-in. The `graph.json` and `GRAPH_REPORT.md` are the artifacts; this file is the surrounding context.
