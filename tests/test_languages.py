@@ -978,7 +978,7 @@ def test_ts_static_template_literal_resolved():
 
 # ── Markdown ─────────────────────────────────────────────────────────────────
 
-from graphify.extract import extract_markdown, _resolve_markdown_link, _resolve_markdown_wikilink
+from graphify.extract import extract_markdown, _resolve_markdown_link, _resolve_markdown_wikilink, extract
 
 def test_markdown_no_error():
     r = extract_markdown(FIXTURES / "deploy_guide.md")
@@ -1059,6 +1059,15 @@ def test_resolve_wikilink_pipe():
     result = _resolve_markdown_wikilink("sample|Click here", FIXTURES / "test_links.md")
     assert result is not None
     assert "sample" in str(result).lower()
+
+
+def test_extract_routes_markdown_files():
+    """Regression: extract() must dispatch .md files to extract_markdown() so the
+    links_to edges this PR adds actually appear in pipeline output (review on #1066).
+    """
+    result = extract([FIXTURES / "test_links.md"])
+    relations = {e.get("relation") for e in result["edges"]}
+    assert "links_to" in relations, f"expected links_to in {relations}"
 
 
 # ── Groovy ───────────────────────────────────────────────────────────────────
